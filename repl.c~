@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
+
+#define INPUT_MAX 300
+// http://neugierig.org/software/c-repl/
+
+
+void init(int* fd) {
+	char str[INPUT_MAX] = "#include <stdio.h>\nint main(){\n";
+	*fd = open("c.c", O_WRONLY | O_CREAT | O_APPEND, 0644);
+	write(*fd, str, strlen(str));
+}
+void insert(int* fd, char* line) {
+	write(*fd, line, strlen(line));
+}
+void file_close(int* fd) {
+	write(*fd, "\n}", 2);
+	close(*fd);
+}
+void eval() {
+
+}
+
+int main() {
+	char line[INPUT_MAX];
+	int fd;
+
+	init(&fd);
+
+	while(1) {
+		printf("> ");
+		memset(line, 0, sizeof(line));
+		scanf("%s", line);
+		insert(&fd, line);
+		//eval();
+	}
+
+	return 0;
+}
